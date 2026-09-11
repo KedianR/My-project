@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdc71071adabdae4e9dc38df9d70c26c, type: 3}
+  m_Name: FireEmergencyResponse
+  m_EditorClassIdentifier: Assembly-CSharp::TrainingScenarioData
+  scenarioID: fire_emergency_response_v1
+  scenarioName: 
+  steps:
+  - {fileID: 11400000, guid: 93bd57657b7976646adfecbd020b56c1, type: 2}
+  - {fileID: 11400000, guid: bfe2213e7cc2ec145b05f647d677f83d, type: 2}
+  - {fileID: 11400000, guid: 66cb5b4bc3ff883459454dafda662531, type: 2}
+  - {fileID: 11400000, guid: b35c8046feb17994ca561a38b636dfb0, type: 2}
+  - {fileID: 11400000, guid: d25771901eb68de49916eec1411363ed, type: 2}
+  - {fileID: 11400000, guid: 827ceeaaafc049e4c82310ba4623b63e, type: 2}
+  - {fileID: 11400000, guid: 2113db54a1886dc4bbc7d26a7420e96c, type: 2}
+  - {fileID: 11400000, guid: 3c322a82ed583fd45bb3d82a71d6ebf2, type: 2}
+  - {fileID: 11400000, guid: df2db5b13bf115d47a87f5e4a4932a71, type: 2}
+  - {fileID: 11400000, guid: 3528c5971d25fc246a86ffc3a96744b3, type: 2}
+  passingThresholdScore: 8
+  timeLimitSeconds: 0

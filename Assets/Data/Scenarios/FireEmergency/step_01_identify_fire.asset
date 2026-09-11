@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f25ec5750a56ee041815cc1909767683, type: 3}
+  m_Name: step_01_identify_fire
+  m_EditorClassIdentifier: Assembly-CSharp::TrainingStepData
+  stepID: step_01_identify_fire
+  instructionText: HAZARD DETECTED! A fire has broken out. Tap the fire to acknowledge the hazard.
+  targetObjectID: fire_hazard
+  expectedAction: 0
+  isCriticalErrorIfMissed: 1
+  successFeedback: Hazard correctly identified.
+  failureFeedback: Failed to identify the fire hazard.

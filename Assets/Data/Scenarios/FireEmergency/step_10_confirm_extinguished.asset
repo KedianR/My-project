@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f25ec5750a56ee041815cc1909767683, type: 3}
+  m_Name: step_10_confirm_extinguished
+  m_EditorClassIdentifier: Assembly-CSharp::TrainingStepData
+  stepID: step_10_confirm_extinguished
+  instructionText: Fire suppressed! Tap the area to confirm the scene is safe.
+  targetObjectID: fire_suppressed_zone
+  expectedAction: 0
+  isCriticalErrorIfMissed: 0
+  successFeedback: Scene confirmed safe. Scenario complete.
+  failureFeedback: Scene safety not confirmed.
