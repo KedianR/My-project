@@ -8,8 +8,14 @@ namespace SafetyTraining.UI
     public class FeedbackController : MonoBehaviour
     {
         [Header("UI References")]
-        public Image feedbackBackground;
-        public TextMeshProUGUI feedbackText;
+        [Tooltip("Assign the Feedback_Background GameObject")]
+        public GameObject feedbackBackgroundObj;
+        [Tooltip("Assign the Feedback Text GameObject")]
+        public GameObject feedbackTextObj;
+
+        private Image feedbackImage;
+        private UnityEngine.UI.Text legacyText;
+        private TextMeshProUGUI tmpText;
 
         [Header("Colors")]
         public Color successColor = new Color(0, 1, 0, 0.8f);
@@ -22,8 +28,17 @@ namespace SafetyTraining.UI
 
         private void Awake()
         {
-            if (feedbackBackground != null) feedbackBackground.gameObject.SetActive(false);
-            if (feedbackText != null) feedbackText.gameObject.SetActive(false);
+            if (feedbackBackgroundObj != null) 
+            {
+                feedbackImage = feedbackBackgroundObj.GetComponent<Image>();
+                feedbackBackgroundObj.SetActive(false);
+            }
+            if (feedbackTextObj != null) 
+            {
+                legacyText = feedbackTextObj.GetComponent<UnityEngine.UI.Text>();
+                tmpText = feedbackTextObj.GetComponent<TextMeshProUGUI>();
+                feedbackTextObj.SetActive(false);
+            }
         }
 
         /// <summary>
@@ -40,16 +55,17 @@ namespace SafetyTraining.UI
 
         private IEnumerator FeedbackRoutine(bool isCorrect, string message)
         {
-            if (feedbackBackground != null)
+            if (feedbackBackgroundObj != null)
             {
-                feedbackBackground.color = isCorrect ? successColor : failureColor;
-                feedbackBackground.gameObject.SetActive(true);
+                if (feedbackImage != null) feedbackImage.color = isCorrect ? successColor : failureColor;
+                feedbackBackgroundObj.SetActive(true);
             }
 
-            if (feedbackText != null)
+            if (feedbackTextObj != null)
             {
-                feedbackText.text = message;
-                feedbackText.gameObject.SetActive(true);
+                if (legacyText != null) legacyText.text = message;
+                if (tmpText != null) tmpText.text = message;
+                feedbackTextObj.SetActive(true);
             }
 
             // Optional: Play a sound effect here
@@ -57,8 +73,8 @@ namespace SafetyTraining.UI
 
             yield return new WaitForSeconds(displayDuration);
 
-            if (feedbackBackground != null) feedbackBackground.gameObject.SetActive(false);
-            if (feedbackText != null) feedbackText.gameObject.SetActive(false);
+            if (feedbackBackgroundObj != null) feedbackBackgroundObj.SetActive(false);
+            if (feedbackTextObj != null) feedbackTextObj.SetActive(false);
         }
     }
 }

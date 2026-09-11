@@ -43,16 +43,29 @@ public static class SceneSetupWizard
         if (scenarioData     == null) LogWarn(ref log, $"Could not load TrainingScenarioData at: {SCENARIO_ASSET}");
         if (localizationData == null) LogWarn(ref log, $"Could not load LocalizationData at: {LOCALIZATION_ASSET}");
 
-        // ── 3. Find scene components ────────────────────────────────────────
-        var scenarioEngine   = Object.FindFirstObjectByType<ScenarioEngine>(FindObjectsInactive.Include);
-        var assessmentEngine = Object.FindFirstObjectByType<AssessmentEngine>(FindObjectsInactive.Include);
-        var feedbackCtrl     = Object.FindFirstObjectByType<FeedbackController>(FindObjectsInactive.Include);
-        var uiManager        = Object.FindFirstObjectByType<UIManager>(FindObjectsInactive.Include);
-        var locManager       = Object.FindFirstObjectByType<LocalizationManager>(FindObjectsInactive.Include);
-        var gameModeManager  = Object.FindFirstObjectByType<GameModeManager>(FindObjectsInactive.Include);
-        var interactionUI    = Object.FindFirstObjectByType<ARInteractionUI>(FindObjectsInactive.Include);
-        var interactionHandler = Object.FindFirstObjectByType<ARInteractionHandler>(FindObjectsInactive.Include);
-        var placementCtrl    = Object.FindFirstObjectByType<ARPlacementController>(FindObjectsInactive.Include);
+        // ── 3. Find scene components by GameObject names (fallback to Type) ──
+        var coreManager = GameObject.Find("CoreManager");
+        var scenarioEngine   = coreManager != null ? coreManager.GetComponent<ScenarioEngine>() : Object.FindFirstObjectByType<ScenarioEngine>(FindObjectsInactive.Include);
+        var assessmentEngine = coreManager != null ? coreManager.GetComponent<AssessmentEngine>() : Object.FindFirstObjectByType<AssessmentEngine>(FindObjectsInactive.Include);
+        
+        var feedbackCanvas = GameObject.Find("Feedback_Canvas") ?? GameObject.Find("Feedback_Background");
+        var feedbackCtrl     = feedbackCanvas != null ? feedbackCanvas.GetComponent<FeedbackController>() : Object.FindFirstObjectByType<FeedbackController>(FindObjectsInactive.Include);
+        
+        var uiCanvas = GameObject.Find("UICanvas") ?? GameObject.Find("HUD_Panel");
+        var uiManager        = uiCanvas != null ? uiCanvas.GetComponentInChildren<UIManager>(true) : Object.FindFirstObjectByType<UIManager>(FindObjectsInactive.Include);
+        
+        var locManagerObj = GameObject.Find("LocalizationManager");
+        var locManager       = locManagerObj != null ? locManagerObj.GetComponent<LocalizationManager>() : Object.FindFirstObjectByType<LocalizationManager>(FindObjectsInactive.Include);
+        
+        var gameModeManagerObj = GameObject.Find("GameModeManager");
+        var gameModeManager  = gameModeManagerObj != null ? gameModeManagerObj.GetComponent<GameModeManager>() : Object.FindFirstObjectByType<GameModeManager>(FindObjectsInactive.Include);
+
+        var arActionMenu = GameObject.Find("AR_ActionMenu_Canvas");
+        var interactionUI    = arActionMenu != null ? arActionMenu.GetComponent<ARInteractionUI>() : Object.FindFirstObjectByType<ARInteractionUI>(FindObjectsInactive.Include);
+        
+        var xrOrigin = GameObject.Find("XR Origin");
+        var interactionHandler = xrOrigin != null ? xrOrigin.GetComponentInChildren<ARInteractionHandler>(true) : Object.FindFirstObjectByType<ARInteractionHandler>(FindObjectsInactive.Include);
+        var placementCtrl    = xrOrigin != null ? xrOrigin.GetComponentInChildren<ARPlacementController>(true) : Object.FindFirstObjectByType<ARPlacementController>(FindObjectsInactive.Include);
 
         // ── 4. ScenarioEngine wiring ────────────────────────────────────────
         if (scenarioEngine != null)
@@ -111,14 +124,14 @@ public static class SceneSetupWizard
         {
             SerializedObject so = new SerializedObject(interactionUI);
 
-            // feedbackController  ← public field, link it
+            // feedbackControllerSource  ← public GameObject field, link it
             if (feedbackCtrl != null)
-                SetObjectRef(so, "feedbackController", feedbackCtrl, ref fixes, ref log, "ARInteractionUI.feedbackController");
+                SetObjectRef(so, "feedbackControllerSource", feedbackCtrl.gameObject, ref fixes, ref log, "ARInteractionUI.feedbackControllerSource");
 
             so.ApplyModifiedProperties();
             EditorUtility.SetDirty(interactionUI);
         }
-        else LogWarn(ref log, "ARInteractionUI not found in scene (may be on a prefab — link feedbackController there).");
+        else LogWarn(ref log, "ARInteractionUI not found in scene (may be on a prefab — link feedbackControllerSource there).");
 
         // ── 8. Save the scene ───────────────────────────────────────────────
         EditorSceneManager.MarkSceneDirty(SceneManager.GetActiveScene());

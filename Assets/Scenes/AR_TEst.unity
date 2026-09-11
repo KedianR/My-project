@@ -228,6 +228,18 @@ MonoBehaviour:
   btnAvoid: {fileID: 196748274}
   btnReport: {fileID: 466259884}
   btnIsolate: {fileID: 1331069657}
+  promptText: {fileID: 1165143835}
+  avoidLabel: {fileID: 1165143835}
+  reportLabel: {fileID: 1887518589}
+  isolateLabel: {fileID: 1004452614}
+  promptTrainingKey: ui_prompt_training
+  avoidLabelKey: ui_btn_avoid
+  reportLabelKey: ui_btn_report
+  isolateLabelKey: ui_btn_isolate
+  feedbackCorrectKey: feedback_correct
+  feedbackIncorrectKey: feedback_incorrect
+  feedbackControllerSource: {fileID: 176867275}
+  audioSource: {fileID: 0}
 --- !u!223 &96322492
 Canvas:
   m_ObjectHideFlags: 0
@@ -2326,16 +2338,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 885c2ad69e607f24d894a6df11228947, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::UIManager
-  scenarioEngine: {fileID: 1790912414}
-  assessmentEngine: {fileID: 1790912413}
+  scenarioEngine: {fileID: 1898148280}
+  assessmentEngine: {fileID: 1898148283}
   hudPanel: {fileID: 2093500318}
   instructionPanel: {fileID: 27233010}
   resultsPanel: {fileID: 719477653}
-  statusText: {fileID: 1746914896}
-  instructionText: {fileID: 1678980905}
-  resultsScoreText: {fileID: 897833644}
-  resultsCompetencyText: {fileID: 1619285889}
-  resultsFeedbackText: {fileID: 651060101}
+  statusText: {fileID: 0}
+  instructionText: {fileID: 0}
+  resultsScoreText: {fileID: 0}
+  resultsCompetencyText: {fileID: 0}
+  resultsFeedbackText: {fileID: 0}
 --- !u!114 &1040330805
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6435,9 +6447,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cf3fe5008d364ca48ba84730d11c6dfb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ScenarioEngine
-  activeScenario: {fileID: 11400000, guid: 40adfa25bbc132f46b1685edc1d49752, type: 2}
+  activeScenario: {fileID: 11400000, guid: 352d08c0f11222848803419cfb20dbee, type: 2}
   placementController: {fileID: 1709989340}
   interactionHandler: {fileID: 1709989339}
+  feedbackController: {fileID: 176867276}
 --- !u!114 &1790912415
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6578,7 +6591,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ScenarioEngine
   activeScenario: {fileID: 11400000, guid: 352d08c0f11222848803419cfb20dbee, type: 2}
   placementController: {fileID: 461015887}
-  interactionHandler: {fileID: 810444750}
+  interactionHandler: {fileID: 810444751}
+  feedbackController: {fileID: 176867276}
 --- !u!114 &1898148281
 MonoBehaviour:
   m_ObjectHideFlags: 0

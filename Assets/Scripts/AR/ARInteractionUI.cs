@@ -29,13 +29,13 @@ namespace SafetyTraining.AR
 
         [Header("UI Text")]
         [Tooltip("Optional prompt label shown in Training Mode only.")]
-        public TextMeshProUGUI promptText;
+        public Text promptText;
         [Tooltip("Label on the Avoid button")]
-        public TextMeshProUGUI avoidLabel;
+        public Text avoidLabel;
         [Tooltip("Label on the Report button")]
-        public TextMeshProUGUI reportLabel;
+        public Text reportLabel;
         [Tooltip("Label on the Isolate button")]
-        public TextMeshProUGUI isolateLabel;
+        public Text isolateLabel;
 
         [Header("Localization Keys")]
         public string promptTrainingKey = "ui_prompt_training";
@@ -46,8 +46,10 @@ namespace SafetyTraining.AR
         public string feedbackIncorrectKey = "feedback_incorrect";
 
         [Header("Dependencies")]
-        [Tooltip("Assign the FeedbackController from the scene.")]
-        public SafetyTraining.UI.FeedbackController feedbackController;
+        [Tooltip("Assign the Feedback_Background or Feedback_Canvas from the scene.")]
+        public GameObject feedbackControllerSource;
+        
+        private SafetyTraining.UI.FeedbackController feedbackController;
 
         [Tooltip("AudioSource used for localized voice prompts.")]
         public AudioSource audioSource;
@@ -59,6 +61,13 @@ namespace SafetyTraining.AR
         // ── Unity Lifecycle ──────────────────────────────────────────────────────
         private void Awake()
         {
+            if (feedbackControllerSource != null)
+            {
+                feedbackController = feedbackControllerSource.GetComponent<SafetyTraining.UI.FeedbackController>();
+                if (feedbackController == null) feedbackController = feedbackControllerSource.GetComponentInParent<SafetyTraining.UI.FeedbackController>();
+                if (feedbackController == null) feedbackController = feedbackControllerSource.GetComponentInChildren<SafetyTraining.UI.FeedbackController>();
+            }
+
             canvas = GetComponent<Canvas>();
             if (canvas != null) canvas.enabled = false;
 

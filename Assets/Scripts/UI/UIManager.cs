@@ -18,13 +18,12 @@ public class UIManager : MonoBehaviour
     public GameObject instructionPanel;
     public GameObject resultsPanel;
 
-    [Header("UI Text Elements (TextMeshPro)")]
-    // FIX: Changed from legacy UnityEngine.UI.Text to TextMeshProUGUI
-    public TextMeshProUGUI statusText;
-    public TextMeshProUGUI instructionText;
-    public TextMeshProUGUI resultsScoreText;
-    public TextMeshProUGUI resultsCompetencyText;
-    public TextMeshProUGUI resultsFeedbackText;
+    [Header("UI Text Elements")]
+    public UnityEngine.UI.Text statusText;
+    public UnityEngine.UI.Text instructionText;
+    public UnityEngine.UI.Text resultsScoreText;
+    public UnityEngine.UI.Text resultsCompetencyText;
+    public UnityEngine.UI.Text resultsFeedbackText;
 
     private void OnEnable()
     {
