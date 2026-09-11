@@ -1,5 +1,6 @@
 using UnityEngine;
-using SafetyTraining.AR; // Using the namespace we saw in ARPlacementController
+using SafetyTraining.AR;
+using SafetyTraining.UI;
 
 public enum ScenarioState
 {
@@ -21,10 +22,13 @@ public class ScenarioEngine : MonoBehaviour
     [Header("AR References")]
     [Tooltip("Reference to handle placement logic")]
     public ARPlacementController placementController;
-    
-    // Using Behaviour so we can toggle .enabled even if we don't know the exact namespace/class name right now
+
     [Tooltip("Reference to handle interactions (ARInteractionHandler)")]
-    public Behaviour interactionHandler; 
+    public Behaviour interactionHandler;
+
+    [Header("UI References")]
+    [Tooltip("FeedbackController that shows per-step correct/incorrect banners.")]
+    public FeedbackController feedbackController;
 
     public ScenarioState CurrentState { get; private set; }
 
@@ -166,18 +170,33 @@ public class ScenarioEngine : MonoBehaviour
 
     private void HandleValidationState()
     {
-        // We will validate the action here against activeScenario.steps[currentStepIndex]
-        // And call LocalEventLogger.Instance.LogAction(...)
-        
         // Disable interactions during validation
         if (interactionHandler != null)
-        {
             interactionHandler.enabled = false;
+
+        // NOTE: ARInteractiveObject.OnInteract() already determined correctness and
+        // logged it via LocalEventLogger. We read the last entry here to drive feedback UI.
+        if (feedbackController != null && LocalEventLogger.Instance != null)
+        {
+            var logs = LocalEventLogger.Instance.GetLogs();
+            if (logs != null && logs.Count > 0)
+            {
+                WorkerAction lastAction = logs[logs.Count - 1];
+
+                // Resolve feedback text from the current step's ScriptableObject data
+                if (activeScenario != null && CurrentStepIndex < activeScenario.steps.Length)
+                {
+                    TrainingStepData step = activeScenario.steps[CurrentStepIndex];
+                    string msg = lastAction.isCorrect ? step.successFeedback : step.failureFeedback;
+                    if (!string.IsNullOrEmpty(msg))
+                        feedbackController.ShowFeedback(lastAction.isCorrect, msg);
+                }
+            }
         }
 
         CurrentStepIndex++;
-        
-        if (CurrentStepIndex >= activeScenario.steps.Length)
+
+        if (activeScenario == null || CurrentStepIndex >= activeScenario.steps.Length)
         {
             ChangeState(ScenarioState.COMPLETE);
         }

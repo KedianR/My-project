@@ -1,7 +1,12 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
+using TMPro; // FIX: Use TextMeshProUGUI throughout for consistency with FeedbackController
 
+/// <summary>
+/// Listens to ScenarioEngine and AssessmentEngine events and drives the screen-space HUD.
+/// All text fields use TextMeshProUGUI for render quality consistency.
+/// </summary>
 public class UIManager : MonoBehaviour
 {
     [Header("Engine References")]
@@ -13,18 +18,19 @@ public class UIManager : MonoBehaviour
     public GameObject instructionPanel;
     public GameObject resultsPanel;
 
-    [Header("UI Text Elements")]
-    public Text statusText;
-    public Text instructionText;
-    public Text resultsScoreText;
-    public Text resultsCompetencyText;
-    public Text resultsFeedbackText;
+    [Header("UI Text Elements (TextMeshPro)")]
+    // FIX: Changed from legacy UnityEngine.UI.Text to TextMeshProUGUI
+    public TextMeshProUGUI statusText;
+    public TextMeshProUGUI instructionText;
+    public TextMeshProUGUI resultsScoreText;
+    public TextMeshProUGUI resultsCompetencyText;
+    public TextMeshProUGUI resultsFeedbackText;
 
     private void OnEnable()
     {
         if (scenarioEngine != null)
         {
-            scenarioEngine.OnStateChanged += HandleStateChanged;
+            scenarioEngine.OnStateChanged       += HandleStateChanged;
             scenarioEngine.OnInstructionUpdated += HandleInstructionUpdated;
         }
 
@@ -38,7 +44,7 @@ public class UIManager : MonoBehaviour
     {
         if (scenarioEngine != null)
         {
-            scenarioEngine.OnStateChanged -= HandleStateChanged;
+            scenarioEngine.OnStateChanged       -= HandleStateChanged;
             scenarioEngine.OnInstructionUpdated -= HandleInstructionUpdated;
         }
 
@@ -50,41 +56,36 @@ public class UIManager : MonoBehaviour
 
     private void Start()
     {
-        // Initial UI state
-        if (hudPanel != null) hudPanel.SetActive(true);
+        if (hudPanel         != null) hudPanel.SetActive(true);
         if (instructionPanel != null) instructionPanel.SetActive(false);
-        if (resultsPanel != null) resultsPanel.SetActive(false);
+        if (resultsPanel     != null) resultsPanel.SetActive(false);
     }
+
+    // ── Event Handlers ───────────────────────────────────────────────────────
 
     private void HandleStateChanged(ScenarioState newState)
     {
         if (statusText != null)
             statusText.text = $"State: {newState}";
 
-        // Show/hide instruction panel based on state
         if (instructionPanel != null)
         {
-            bool showInstruction = newState == ScenarioState.INSTRUCTION || newState == ScenarioState.AWAITING_ACTION;
-            instructionPanel.SetActive(showInstruction);
+            bool show = newState == ScenarioState.INSTRUCTION || newState == ScenarioState.AWAITING_ACTION;
+            instructionPanel.SetActive(show);
         }
     }
 
     private void HandleInstructionUpdated(string instruction)
     {
         if (instructionText != null)
-        {
             instructionText.text = instruction;
-        }
     }
 
     private void HandleAssessmentComplete(AssessmentResult result)
     {
-        // Hide other panels
-        if (hudPanel != null) hudPanel.SetActive(false);
+        if (hudPanel         != null) hudPanel.SetActive(false);
         if (instructionPanel != null) instructionPanel.SetActive(false);
-
-        // Show results panel
-        if (resultsPanel != null) resultsPanel.SetActive(true);
+        if (resultsPanel     != null) resultsPanel.SetActive(true);
 
         if (resultsScoreText != null)
             resultsScoreText.text = $"Score: {result.TotalScore}";
@@ -94,19 +95,18 @@ public class UIManager : MonoBehaviour
 
         if (resultsFeedbackText != null)
         {
-            string feedbackStr = "Feedback:\n";
+            System.Text.StringBuilder sb = new System.Text.StringBuilder("Feedback:\n");
             foreach (var note in result.FeedbackNotes)
-            {
-                feedbackStr += $"- {note}\n";
-            }
-            resultsFeedbackText.text = feedbackStr;
+                sb.AppendLine($"- {note}");
+            resultsFeedbackText.text = sb.ToString();
         }
     }
 
-    // Called by the Restart Button
+    // ── Public Button Callbacks ───────────────────────────────────────────────
+
+    /// <summary>Called by the Restart button on the Results panel.</summary>
     public void RestartScenario()
     {
-        // For MVP, just reload the current active scene
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
     }
 }
